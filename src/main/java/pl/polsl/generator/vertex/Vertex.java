@@ -1,4 +1,4 @@
-package pl.polsl.generator;
+package pl.polsl.generator.vertex;
 
 /**
  *
@@ -24,6 +24,11 @@ public class Vertex
     public static Vertex createDepot(int i, double x, double y)
     {
         return new Vertex(i, x, y, 0, 0);
+    }
+    
+    public static Vertex createDepot(double x, double y)
+    {
+        return createDepot(0, x, y);
     }
     
     public static Vertex createCustomer(int i, double x, double y, double q, int t)
