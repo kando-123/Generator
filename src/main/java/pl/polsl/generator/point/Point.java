@@ -11,11 +11,53 @@ public class Point
     public final double x;
     public final double y;
 
-    Point(double x, double y)
+    public Point(double x, double y)
     {
         this.x = x;
         this.y = y;
     }
+    
+    public double length()
+    {
+        return Math.hypot(x, y);
+    }
+    
+    public double lengthSquared()
+    {
+        return x * x + y * y;
+    }
+    
+    public double distance(Point that)
+    {
+        return Math.hypot(this.x - that.x, this.y - that.y);
+    }
+    
+    public Point plus(Point that)
+    {
+        return new Point(this.x + that.x, this.y + that.y);
+    }
+    
+    public Point minus(Point that)
+    {
+        return new Point(this.x - that.x, this.y - that.y);
+    }
+    
+    public Point times(double scalar)
+    {
+        return new Point(scalar * x, scalar * y);
+    }
+    
+    public Point average(Point that)
+    {
+        return new Point((this.x + that.x) / 2, (this.y + that.y) / 2);
+    }
+    
+    public double dot(Point that)
+    {
+        return this.x * that.x + this.y * that.y;
+    }
+    
+    
 
     @Override
     public boolean equals(Object obj)

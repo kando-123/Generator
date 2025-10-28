@@ -6,5 +6,5 @@ package pl.polsl.generator.point;
  */
 public interface PointGenerator
 {
-    Point[] generate(int n);
+    Point[] generatePoints(int pointCount);
 }

@@ -4,8 +4,8 @@ import java.util.Arrays;
 import pl.polsl.generator.point.*;
 
 /**
- * The program generates graphs for the algorithms solving
- * the Time-Dependent Vehicle Routing Problem.
+ * The program generates problem files for the algorithms
+ * solving the Time-Dependent Vehicle Routing Problem.
  * 
  * Input: configuration file.
  * Output: graph(s) generated according to the configuration.
@@ -22,7 +22,7 @@ public class Generator
     public static void main(String[] args)
     {
         PointGenerator opg = new OrthogonalPointGenerator(800, 600);
-        Point points[] = opg.generate(10);
+        Point points[] = opg.generatePoints(10);
         System.out.println(Arrays.toString(points));
     }
 }

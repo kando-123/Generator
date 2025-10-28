@@ -20,10 +20,10 @@ public class OrthogonalPointGenerator implements PointGenerator
     }
 
     @Override
-    public Point[] generate(int n)
+    public Point[] generatePoints(int pointCount)
     {
         Set<Point> points = new HashSet<>();
-        while (points.size() < n)
+        while (points.size() < pointCount)
         {
             double x = random.nextDouble(width);
             double y = random.nextDouble(height);

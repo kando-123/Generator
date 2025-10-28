@@ -1,8 +1,6 @@
-/*
- * 
- * 
- */
 package pl.polsl.generator.edge;
+
+import pl.polsl.generator.vertex.Vertex;
 
 /**
  *
@@ -10,5 +8,5 @@ package pl.polsl.generator.edge;
  */
 public interface EdgeGenerator
 {
-    
+    Edge[] generateEdges(Vertex[] vertices);
 }
