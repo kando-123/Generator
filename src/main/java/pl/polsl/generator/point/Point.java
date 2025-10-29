@@ -57,7 +57,10 @@ public class Point
         return this.x * that.x + this.y * that.y;
     }
     
-    
+    public double cross(Point that)
+    {
+        return this.x * that.y - this.y * that.x;
+    }
 
     @Override
     public boolean equals(Object obj)

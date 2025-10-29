@@ -20,15 +20,16 @@ public class Triangle
             throw new IllegalArgumentException("The points shall be pairwise unequal.");
         }
 
-        double angle = Math.atan2(p3.y - p1.y, p3.x - p1.x) - Math.atan2(p2.y - p1.y, p2.x - p1.x);
+        double angle = Math.atan2(p3.y - p1.y, p3.x - p1.x) - Math.atan2(p2.y - p1.y, p2.x - p1.x) + Math.TAU;
+        angle %= Math.TAU;
 
-        if (angle == +Math.PI || angle == 0 || angle == -Math.PI)
+        if (angle == 0 || angle == Math.PI)
         {
-            throw new IllegalArgumentException("The points shall be nonlinear");
+            throw new IllegalArgumentException("The points shall be noncollinear");
         }
 
         points[0] = p1;
-        if (angle > 0)
+        if (angle < Math.PI)
         {
             points[1] = p2;
             points[2] = p3;
@@ -38,6 +39,11 @@ public class Triangle
             points[1] = p3;
             points[2] = p2;
         }
+
+        assert (Math.atan2(points[2].y - points[0].y, points[2].x - points[0].x) - Math.atan2(points[1].y - points[0].y, points[1].x - points[0].x) + Math.TAU) % Math.TAU < Math.PI
+                && (Math.atan2(points[0].y - points[1].y, points[0].x - points[1].x) - Math.atan2(points[2].y - points[1].y, points[2].x - points[1].x) + Math.TAU) % Math.TAU < Math.PI
+                && (Math.atan2(points[1].y - points[2].y, points[1].x - points[2].x) - Math.atan2(points[0].y - points[2].y, points[0].x - points[2].x) + Math.TAU) % Math.TAU < Math.PI :
+                "Counterclockwisification failed.";
     }
 
     public Point[] getPoints()
@@ -111,6 +117,36 @@ public class Triangle
         return Math.sqrt(area);
     }
 
+    /**
+     * Computes the determinant of the matrix:
+     * <table border="1">
+     * <tr>
+     * <td>x<sub>0</sub></td>
+     * <td>y<sub>0</sub></td>
+     * <td>x<sub>0</sub><sup>2</sup> + y<sub>0</sub><sup>2</sup></td>
+     * <td>1</td>
+     * </tr>
+     * <tr>
+     * <td>x<sub>1</sub></td>
+     * <td>y<sub>1</sub></td>
+     * <td>x<sub>1</sub><sup>2</sup> + y<sub>1</sub><sup>2</sup></td>
+     * <td>1</td>
+     * </tr>
+     * <tr>
+     * <td>x<sub>2</sub></td>
+     * <td>y<sub>2</sub></td>
+     * <td>x<sub>2</sub><sup>2</sup> + y<sub>2</sub><sup>2</sup></td>
+     * <td>1</td>
+     * </tr>
+     * <tr>
+     * <td>x</td>
+     * <td>y</td>
+     * <td>x<sup>2</sup> + y<sup>2</sup></td>
+     * <td>1</td>
+     * </tr>
+     * </table>
+     * and compares it against 0.
+     */
     public boolean liesInCircumcircle(Point point)
     {
         var entries = new double[16];
@@ -125,7 +161,7 @@ public class Triangle
         entries[13] = point.y;
         entries[14] = point.lengthSquared();
         entries[15] = 1;
-        
+
         Matrix4x4 m4x4 = new Matrix4x4(entries);
         return m4x4.getDeterminant() > 0;
     }
@@ -137,7 +173,7 @@ public class Triangle
         Matrix4x4(double... entries)
         {
             assert entries.length == 16;
-            
+
             rows = new double[4][];
             for (int i = 0, r = 0; r < 4; ++r)
             {
@@ -175,11 +211,11 @@ public class Triangle
                     {
                         continue;
                     }
-                    
+
                     addend *= rows[a++][j];
                     subtrahend *= rows[s--][j];
                 }
-                
+
                 determinant += addend;
                 determinant -= subtrahend;
             }
