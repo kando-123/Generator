@@ -146,6 +146,8 @@ public class Triangle
      * </tr>
      * </table>
      * and compares it against 0.
+     * @param point the point that will be tested against membership to the circumcircle
+     * @return true if and only if the point lies within the circumcircle of this triangle
      */
     public boolean liesInCircumcircle(Point point)
     {
@@ -162,8 +164,8 @@ public class Triangle
         entries[14] = point.lengthSquared();
         entries[15] = 1;
 
-        Matrix4x4 m4x4 = new Matrix4x4(entries);
-        return m4x4.getDeterminant() > 0;
+        Matrix4x4 matrix4x4 = new Matrix4x4(entries);
+        return matrix4x4.getDeterminant() > 0;
     }
 
     private static class Matrix4x4

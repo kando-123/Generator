@@ -8,5 +8,5 @@ import pl.polsl.generator.point.Point;
  */
 public interface Triangulation
 {
-    UnorderedIntPair[] triangulate(Point[] points);
+    IntPair[] triangulate(Point[] points);
 }
