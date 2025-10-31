@@ -2,11 +2,10 @@ package pl.polsl.generator.graph;
 
 import java.util.Arrays;
 import pl.polsl.generator.demand.*;
-import pl.polsl.generator.edge.Edge;
-import pl.polsl.generator.edge.EdgeGenerator;
+import pl.polsl.generator.edge.*;
 import pl.polsl.generator.point.*;
 import pl.polsl.generator.time.*;
-import pl.polsl.generator.vertex.Vertex;
+import pl.polsl.generator.vertex.*;
 
 /**
  *
@@ -17,7 +16,7 @@ public class GraphGenerator
     private final PointGenerator pointGenerator;
     private final DemandGenerator demandGenerator;
     private final ServiceTimeFunction serviceTimeFunction;
-    private final EdgeGenerator edgeGenerator;
+    private final Connector edgeGenerator;
     
     private final int vertexCount;
     private final double totalDemand;
@@ -65,7 +64,7 @@ public class GraphGenerator
         }
         
         /* Create the edges */
-        Edge[] edges = edgeGenerator.generateEdges(vertices);
+        //Edge[] edges = edgeGenerator.generateEdges(vertices);
         
         
         
@@ -77,7 +76,7 @@ public class GraphGenerator
         private PointGenerator pointGenerator;
         private DemandGenerator demandGenerator;
         private ServiceTimeFunction serviceTimeFunction;
-        private EdgeGenerator edgeGenerator;
+        private Connector edgeGenerator;
         
         private Integer vertexCount;
         private Double totalDemand;
@@ -117,7 +116,7 @@ public class GraphGenerator
             return this;
         }
         
-        public GraphGeneratorBuilder setEdgeGenerator(EdgeGenerator edgeGenerator)
+        public GraphGeneratorBuilder setEdgeGenerator(Connector edgeGenerator)
         {
             if (edgeGenerator == null)
             {

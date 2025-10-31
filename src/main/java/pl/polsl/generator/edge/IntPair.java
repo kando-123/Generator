@@ -1,4 +1,4 @@
-package pl.polsl.generator.triangle;
+package pl.polsl.generator.edge;
 
 /**
  * Pair of integer primitives.

@@ -224,5 +224,4 @@ public class Triangle
             return determinant;
         }
     }
-
 }
