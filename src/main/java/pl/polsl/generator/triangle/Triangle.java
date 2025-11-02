@@ -45,6 +45,16 @@ public class Triangle
                 && (Math.atan2(points[1].y - points[2].y, points[1].x - points[2].x) - Math.atan2(points[0].y - points[2].y, points[0].x - points[2].x) + Math.TAU) % Math.TAU < Math.PI :
                 "Counterclockwisification failed.";
     }
+    
+    public static int next(int i)
+    {
+        return (i + 1) % 3;
+    }
+    
+    public static int prev(int i)
+    {
+        return (i + 2) % 3;
+    }
 
     public Point[] getPoints()
     {
@@ -56,8 +66,8 @@ public class Triangle
         double[] sides = new double[3];
         for (int i = 0; i < 3; ++i)
         {
-            Point p = points[(i + 1) % 3];
-            Point q = points[(i + 2) % 3];
+            Point p = points[next(i)];
+            Point q = points[prev(i)];
             sides[i] = Math.hypot(p.x - q.x, p.y - q.y);
         }
         return sides;
@@ -70,8 +80,8 @@ public class Triangle
         for (int i = 0; i < 3; ++i)
         {
             double a = sides[i];
-            double b = sides[(i + 1) % 3];
-            double c = sides[(i + 2) % 3];
+            double b = sides[next(i)];
+            double c = sides[prev(i)];
             angles[i] = Math.acos((b * b + c * c - a * a) / (2 * b * c));
         }
         return angles;
@@ -94,6 +104,42 @@ public class Triangle
     {
         return Math.toDegrees(getMinimalAngleInRadians());
     }
+    
+    public int getMinimalAngleIndex()
+    {
+        double[] angles = getAnglesInRadians();
+        if (angles[0] <= angles[1] && angles[0] <= angles[1])
+        {
+            return 0;
+        }
+        // In this place, angles[0] is not the minimum. It is either the second smallest angle, or the greatest angle. Since
+        // the method is looking for the minimum, it is now only the relation between angles[1] and angles[2] that matters.
+        else if (angles[1] <= angles[2])
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+    
+    public int getMaximalAngleIndex()
+    {
+        double[] angles = getAnglesInRadians();
+        if (angles[0] >= angles[1] && angles[0] >= angles[2])
+        {
+            return 0;
+        }
+        else if (angles[1] >= angles[2])
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
+    }
 
     public double getPerimeter()
     {
@@ -108,9 +154,10 @@ public class Triangle
     public double getArea()
     {
         /* Heron's formula */
-        double semiperimeter = 0.5 * getPerimeter();
+        double sides[] = getSides();
+        double semiperimeter = 0.5 * (sides[0] + sides[1] + sides[2]); // To avoid internal call to getSides()
         double area = semiperimeter;
-        for (var side : getSides())
+        for (var side : sides)
         {
             area *= semiperimeter - side;
         }
@@ -151,19 +198,25 @@ public class Triangle
      */
     public boolean liesInCircumcircle(Point point)
     {
-        var entries = new double[16];
-        for (int i = 0, e = 0; i < 3; ++i)
+        var entries = new double[]
         {
-            entries[e++] = points[i].x;
-            entries[e++] = points[i].y;
-            entries[e++] = points[i].lengthSquared();
-            entries[e++] = 1;
-        }
-        entries[12] = point.x;
-        entries[13] = point.y;
-        entries[14] = point.lengthSquared();
-        entries[15] = 1;
-
+            points[0].x,
+            points[0].y,
+            points[0].lengthSquared(),
+            1,
+            points[1].x,
+            points[1].y,
+            points[1].lengthSquared(),
+            1,
+            points[2].x,
+            points[2].y,
+            points[2].lengthSquared(),
+            1,
+            point.x,
+            point.y,
+            point.lengthSquared(),
+            1
+        };
         Matrix4x4 matrix4x4 = new Matrix4x4(entries);
         return matrix4x4.getDeterminant() > 0;
     }

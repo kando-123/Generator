@@ -1,8 +1,8 @@
 package pl.polsl.generator.graph;
 
+import pl.polsl.generator.connection.Connector;
 import java.util.Arrays;
 import pl.polsl.generator.demand.*;
-import pl.polsl.generator.edge.*;
 import pl.polsl.generator.point.*;
 import pl.polsl.generator.time.*;
 import pl.polsl.generator.vertex.*;
