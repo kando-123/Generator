@@ -11,6 +11,9 @@ import pl.polsl.generator.vertex.Vertex;
  */
 public class Graph
 {
+    private final Vertex[] vertices;
+    private final Map<Integer, Set<Edge>> edges;
+    
     /**
      * Returns a JSON object representing the vertices and edges of the graph.
      * The fields of the object are indexes of the vertices (successive 0-based integers
