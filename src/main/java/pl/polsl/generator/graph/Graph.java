@@ -14,6 +14,12 @@ public class Graph
     private final Vertex[] vertices;
     private final Map<Integer, Set<Edge>> edges;
     
+    private Graph(GraphBuilder builder)
+    {
+        vertices = builder.vertices;
+        edges = builder.edges;
+    }
+    
     /**
      * Returns a JSON object representing the vertices and edges of the graph.
      * The fields of the object are indexes of the vertices (successive 0-based integers
@@ -25,6 +31,12 @@ public class Graph
      */
     public JsonElement toJson()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+    
+    public static class GraphBuilder
+    {
+        private Vertex[] vertices;
+        private Map<Integer, Set<Edge>> edges;
     }
 }

@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import pl.polsl.generator.connection.*;
 import pl.polsl.generator.demand.*;
+import pl.polsl.generator.edge.Edge;
+import pl.polsl.generator.edge.EdgeGenerator;
 import pl.polsl.generator.point.*;
 import pl.polsl.generator.time.*;
 import pl.polsl.generator.vertex.*;
@@ -18,6 +20,7 @@ public class GraphGenerator
     private final DemandGenerator demandGenerator;
     private final ServiceTimeFunction serviceTimeFunction;
     private final Connector connector;
+    private final EdgeGenerator edgeGenerator;
     
     private final int vertexCount;
     private final double totalDemand;
@@ -29,18 +32,19 @@ public class GraphGenerator
 
     private GraphGenerator(GraphGeneratorBuilder builder)
     {
-        this.pointGenerator = builder.pointGenerator;
-        this.demandGenerator = builder.demandGenerator;
-        this.serviceTimeFunction = builder.serviceTimeFunction;
-        this.connector = builder.connector;
+        pointGenerator = builder.pointGenerator;
+        demandGenerator = builder.demandGenerator;
+        serviceTimeFunction = builder.serviceTimeFunction;
+        connector = builder.connector;
+        edgeGenerator = builder.edgeGenerator;
         
-        this.vertexCount = builder.vertexCount;
-        this.totalDemand = builder.totalDemand;
-        this.demandUnit = builder.demandUnit;
+        vertexCount = builder.vertexCount;
+        totalDemand = builder.totalDemand;
+        demandUnit = builder.demandUnit;
         
-        this.startTime = builder.startTime;
-        this.interval = builder.interval;
-        this.intervalCount = builder.intervalCount;
+        startTime = builder.startTime;
+        interval = builder.interval;
+        intervalCount = builder.intervalCount;
     }
     
     public Graph generateGraph()
@@ -56,8 +60,6 @@ public class GraphGenerator
                 .mapToInt(serviceTimeFunction::serviceTime)
                 .toArray();
         
-        Connection connections[] = connector.connect(points);
-        
         /* Create vertices */
         Vertex[] vertices = new Vertex[vertexCount];
         vertices[0] = Vertex.createDepot(points[0]);
@@ -67,7 +69,9 @@ public class GraphGenerator
         }
         
         /* Create the edges */
+        Connection connections[] = connector.connect(points);
         
+        Edge[] edges = edgeGenerator.generateEdges(vertices, connections);
         
         
         throw new UnsupportedOperationException("Under development.");
@@ -79,6 +83,7 @@ public class GraphGenerator
         private DemandGenerator demandGenerator;
         private ServiceTimeFunction serviceTimeFunction;
         private Connector connector;
+        private EdgeGenerator edgeGenerator;
         
         private Integer vertexCount;
         private Double totalDemand;
@@ -125,6 +130,12 @@ public class GraphGenerator
                 throw new NullPointerException("Parameter connector shall not be null.");
             }
             this.connector = connector;
+            return this;
+        }
+
+        public GraphGeneratorBuilder setEdgeGenerator(EdgeGenerator edgeGenerator)
+        {
+            this.edgeGenerator = edgeGenerator;
             return this;
         }
         

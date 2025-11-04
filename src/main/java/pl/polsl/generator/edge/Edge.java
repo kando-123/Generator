@@ -27,4 +27,19 @@ public class Edge
         this.end = end;
         this.travelTimes = travelTimes;
     }
+
+    public Vertex getStart()
+    {
+        return start;
+    }
+
+    public Vertex getEnd()
+    {
+        return end;
+    }
+    
+    public int getTravelTime(int intervalIndex)
+    {
+        return travelTimes[intervalIndex];
+    }
 }
