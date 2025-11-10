@@ -62,10 +62,50 @@ public class ScaledEdgeGenerator implements EdgeGenerator
                     .sum();
         }
         
-        double speeds[] = new double[prototypes.size()];
-        for (int i = 0; i < speeds.length; ++i)
+        /* Speed in [m/s] */
+        double speeds[] = getSpeeds(cumulatedDistances);
+        
+        throw new UnsupportedOperationException("Under development.");
+    }
+    
+    protected double[] getSpeeds(double distances[])
+    {
+        double maximum = distances[0];
+        double minimum = distances[0];
+        
+        double average = distances[0];
+        
+        for (int i = 1; i < distances.length; ++i)
         {
-            
+            double distance = distances[i];
+            if (distance > maximum)
+            {
+                maximum = distance;
+            }
+            else if (distance < minimum)
+            {
+                minimum = distance;
+            }
+            average += distance;
         }
+        average /= distances.length;
+        double deviation = 0;
+        for (double distance : distances)
+        {
+            double difference = distance - average;
+            deviation += difference * difference;
+        }
+        deviation = Math.sqrt(deviation);
+        
+        /* GENERALIZE */
+        
+        double lower = minimum < average - deviation ? average - deviation : (minimum + average) / 2;
+        double higher = maximum > average + deviation ? average + deviation : (maximum + average) / 2;
+        
+        double thresholds[] = new double[] { minimum, lower, higher, maximum };
+        double speeds[] = new double[] { 0, 30/3.6, 50/3.6, 70/3.6, 0 };
+        
+        var convertion = new ThresholdBasedDistanceToSpeedConvertion(thresholds, speeds);
+        
     }
 }
