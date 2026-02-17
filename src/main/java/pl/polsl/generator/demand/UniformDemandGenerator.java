@@ -9,27 +9,27 @@ import java.util.Random;
 public class UniformDemandGenerator implements DemandGenerator
 {
     @Override
-    public double[] generateDemand(int number, double total, double unit)
+    public double[] generateDemand(int count, double total, double unit)
     {
-        if (number <= 0 || total <= 0 || unit <= 0)
+        if (count <= 0 || total <= 0 || unit <= 0)
         {
-            throw new IllegalArgumentException("Nonpositive number, total demand or unit.");
+            throw new IllegalArgumentException("Nonpositive count, total demand or unit.");
         }
-        if (number * unit > total)
+        if (count * unit > total)
         {
-            throw new IllegalArgumentException("Total demand insufficient for given number of units.");
+            throw new IllegalArgumentException("Total demand insufficient for given count of units.");
         }
         
-        double[] allocation = new double[number];
-        for (int i = 0; i < number; ++i)
+        double[] allocation = new double[count];
+        for (int i = 0; i < count; ++i)
         {
             allocation[i] = unit;
         }
-        double sum = number * unit;
+        double sum = count * unit;
         Random random = new Random();
         while (sum < total)
         {
-            int index = random.nextInt(number);
+            int index = random.nextInt(count);
             allocation[index] += unit;
             sum += unit;
         }

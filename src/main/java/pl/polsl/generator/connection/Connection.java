@@ -36,7 +36,7 @@ public class Connection
     @Override
     public boolean equals(Object obj)
     {
-        return obj != null && obj instanceof Connection that
+        return obj instanceof Connection that
                 ? this.first == that.first && this.last == that.last
                 : false;
     }

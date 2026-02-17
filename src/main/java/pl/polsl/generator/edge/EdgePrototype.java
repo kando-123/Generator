@@ -1,5 +1,6 @@
 package pl.polsl.generator.edge;
 
+import java.util.Arrays;
 import pl.polsl.generator.vertex.Vertex;
 
 /**
@@ -10,42 +11,51 @@ public class EdgePrototype
 {
     private final Vertex start;
     private final Vertex end;
-    private final int travelTimes[];
+    private final double length;
+    private final double[] travelSpeeds;
 
     EdgePrototype(Vertex start, Vertex end, int intervalCount)
     {
         this.start = start;
         this.end = end;
-        this.travelTimes = new int[intervalCount];
+        this.length = Math.hypot(start.getX() - end.getX(), start.getY() - end.getY());
+        this.travelSpeeds = new double[intervalCount];
     }
     
-    void setTravelTime(int index, int value)
+    Vertex getStart()
+    {
+        return start;
+    }
+    
+    Vertex getEnd()
+    {
+        return end;
+    }
+    
+    double getLength()
+    {
+        return length;
+    }
+    
+    void setSpeed(int index, double value)
     {
         if (value < 0)
         {
             throw new IllegalArgumentException("The travel time shall be nonnegative.");
         }
-        travelTimes[index] = value;
+        travelSpeeds[index] = value;
     }
     
-    private Double length = null;
-    
-    double getEuclideanLength()
+    int getTime(double speed)
     {
-        if (length == null)
-        {
-            length = Math.hypot(start.getX() - end.getX(), start.getY() - end.getY());
-        }
-        return length;
-    }
-    
-    double getTimeForSpeed(double speed)
-    {
-        return getEuclideanLength() / speed;
+        return (int) (length / speed);
     }
     
     Edge getEdge()
     {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        int[] travelTimes = Arrays.stream(travelSpeeds)
+                .mapToInt(this::getTime)
+                .toArray();
+        return new Edge(start, end, travelTimes);
     }
 }

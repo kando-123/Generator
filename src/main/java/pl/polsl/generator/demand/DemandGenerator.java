@@ -10,5 +10,5 @@ package pl.polsl.generator.demand;
  */
 public interface DemandGenerator
 {
-    double[] generateDemand(int number, double total, double unit);
+    double[] generateDemand(int count, double total, double unit);
 }

@@ -43,7 +43,7 @@ public class Triangle
         assert (Math.atan2(points[2].y - points[0].y, points[2].x - points[0].x) - Math.atan2(points[1].y - points[0].y, points[1].x - points[0].x) + Math.TAU) % Math.TAU < Math.PI
                 && (Math.atan2(points[0].y - points[1].y, points[0].x - points[1].x) - Math.atan2(points[2].y - points[1].y, points[2].x - points[1].x) + Math.TAU) % Math.TAU < Math.PI
                 && (Math.atan2(points[1].y - points[2].y, points[1].x - points[2].x) - Math.atan2(points[0].y - points[2].y, points[0].x - points[2].x) + Math.TAU) % Math.TAU < Math.PI :
-                "Counterclockwisification failed.";
+                "Failed to organize the points counterclockwise.";
     }
     
     public static int next(int i)

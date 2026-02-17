@@ -25,7 +25,7 @@ public class Edge
         }
         this.start = start;
         this.end = end;
-        this.travelTimes = travelTimes;
+        this.travelTimes = Arrays.copyOf(travelTimes, travelTimes.length);
     }
 
     public Vertex getStart()

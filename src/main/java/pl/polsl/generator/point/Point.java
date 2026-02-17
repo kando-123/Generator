@@ -65,7 +65,7 @@ public class Point
     @Override
     public boolean equals(Object obj)
     {
-        return obj != null && obj instanceof Point that ? this.x == that.x && this.y == that.y : false;
+        return obj instanceof Point that ? this.x == that.x && this.y == that.y : false;
     }
 
     @Override
