@@ -5,19 +5,68 @@ import com.google.gson.*;
 import pl.polsl.generator.edge.Edge;
 import pl.polsl.generator.vertex.Vertex;
 
+class Node
+{
+    final Vertex vertex;
+    final List<Edge> edges;
+
+    Node(Vertex vertex, List<Edge> edges)
+    {
+        this.vertex = vertex;
+        this.edges = edges;
+    }
+    
+    private static final String KEY_X_COORDINATE = "x";
+    private static final String KEY_Y_COORDINATE = "y";
+    private static final String KEY_DEMAND = "q";
+    private static final String KEY_SERVICE_TIME = "t";
+    private static final String KEY_EDGES = "e";
+    
+    JsonElement emit()
+    {
+        JsonObject nodeObject = new JsonObject();
+        
+        nodeObject.addProperty(KEY_X_COORDINATE, vertex.getX());
+        nodeObject.addProperty(KEY_Y_COORDINATE, vertex.getY());
+        nodeObject.addProperty(KEY_DEMAND, vertex.getDemand());
+        nodeObject.addProperty(KEY_SERVICE_TIME, vertex.getServiceTime());
+        
+        JsonObject edgesObject = new JsonObject();
+        edges.sort((Edge e1, Edge e2) -> Integer.compare(e1.getEnd().getIndex(), e2.getEnd().getIndex()));
+        for (Edge edge : edges)
+        {
+            assert edge.getStart().getIndex() == vertex.getIndex(): "Node has an edge that begins in another vertex.";
+            
+            JsonArray times = new JsonArray(edge.getIntervalCount());
+            for (int i = 0; i < edge.getIntervalCount(); ++i)
+            {
+                times.add(edge.getTravelTime(i));
+            }
+            String end = String.valueOf(edge.getEnd().getIndex());
+            edgesObject.add(end, times);
+        }
+        nodeObject.add(KEY_EDGES, edgesObject);
+        
+        return nodeObject;
+    }
+}
+
 /**
  *
  * @author Kay Jay O'Nail
  */
 public class Graph
 {
-    private final Vertex[] vertices;
-    private final Map<Integer, Set<Edge>> edges;
+    private final List<Node> nodes;
     
-    private Graph(GraphBuilder builder)
+    Graph()
     {
-        vertices = builder.vertices;
-        edges = builder.edges;
+        nodes = new ArrayList<>();
+    }
+
+    void addNode(Vertex vertex, List<Edge> edges)
+    {
+        nodes.add(new Node(vertex, edges));
     }
     
     /**
@@ -31,12 +80,13 @@ public class Graph
      */
     public JsonElement toJson()
     {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
-    
-    public static class GraphBuilder
-    {
-        private Vertex[] vertices;
-        private Map<Integer, Set<Edge>> edges;
+        JsonObject object = new JsonObject();
+        for (Node node : nodes)
+        {
+            String index = String.valueOf(node.vertex.getIndex());
+            JsonElement nodeElement = node.emit();
+            object.add(index, nodeElement);
+        }
+        return object;
     }
 }

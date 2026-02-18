@@ -42,4 +42,9 @@ public class Edge
     {
         return travelTimes[intervalIndex];
     }
+    
+    public int getIntervalCount()
+    {
+        return travelTimes.length;
+    }
 }

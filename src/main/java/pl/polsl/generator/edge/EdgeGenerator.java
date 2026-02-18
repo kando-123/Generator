@@ -1,5 +1,6 @@
 package pl.polsl.generator.edge;
 
+import java.util.List;
 import pl.polsl.generator.connection.Connection;
 import pl.polsl.generator.vertex.Vertex;
 
@@ -9,5 +10,5 @@ import pl.polsl.generator.vertex.Vertex;
  */
 public interface EdgeGenerator
 {
-    Edge[] generateEdges(Vertex vertices[], Connection connections[]);
+    List<List<Edge>> generateEdges(Vertex[] vertices, Connection[] connections);
 }

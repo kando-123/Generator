@@ -1,6 +1,8 @@
 package pl.polsl.generator.graph;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import pl.polsl.generator.connection.*;
 import pl.polsl.generator.demand.*;
@@ -50,10 +52,10 @@ public class GraphGenerator
     public Graph generateGraph()
     {
         /* Generate the points */
-        Point points[] = pointGenerator.generatePoints(vertexCount);
+        Point[] points = pointGenerator.generatePoints(vertexCount);
         
         /* Generate the demand for all points except the depot */
-        double demand[] = demandGenerator.generateDemand(vertexCount - 1, totalDemand, demandUnit);
+        double[] demand = demandGenerator.generateDemand(vertexCount - 1, totalDemand, demandUnit);
         
         /* Map the demand to service time */
         int serviceTime[] = Arrays.stream(demand)
@@ -71,10 +73,16 @@ public class GraphGenerator
         /* Create the edges */
         Connection connections[] = connector.connect(points);
         
-        Edge[] edges = edgeGenerator.generateEdges(vertices, connections);
+        List<List<Edge>> edges = edgeGenerator.generateEdges(vertices, connections);
         
+        Graph graph = new Graph();
         
-        throw new UnsupportedOperationException("Under development.");
+        for (int i = 0; i < vertexCount; ++i)
+        {
+            graph.addNode(vertices[i], edges.get(i));
+        }
+        
+        return graph;
     }
     
     public static class GraphGeneratorBuilder

@@ -34,7 +34,7 @@ public class ScaledEdgeGenerator implements EdgeGenerator
     }
 
     @Override
-    public Edge[] generateEdges(Vertex[] vertices, Connection[] connections)
+    public List<List<Edge>> generateEdges(Vertex[] vertices, Connection[] connections)
     {
         EdgePrototype[] prototypes = new EdgePrototype[2 * connections.length];
         
@@ -73,7 +73,11 @@ public class ScaledEdgeGenerator implements EdgeGenerator
         }
 
         LinearFunction function = new LinearFunction(minLength, maxLength, minSpeed, maxSpeed);
-        Edge[] edges = new Edge[prototypes.length];
+        List<List<Edge>> edges = new ArrayList<>(vertices.length);
+        for (int i = 0; i < vertices.length; ++i)
+        {
+            edges.add(new ArrayList<>());
+        }
         for (int i = 0; i < prototypes.length; ++i)
         {
             EdgePrototype prototype = prototypes[i];
@@ -83,7 +87,9 @@ public class ScaledEdgeGenerator implements EdgeGenerator
             {
                 prototype.setSpeed(t, speedFractions[t] * speed);
             }
-            edges[i] = prototype.getEdge();
+            Edge edge = prototype.getEdge();
+            int index = edge.getStart().getIndex();
+            edges.get(index).add(edge);
         }
         return edges;
     }

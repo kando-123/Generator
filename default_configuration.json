@@ -1,0 +1,36 @@
+{
+    "point_generator":
+    {
+        "type": "orthogonal",
+		"width": 15000,
+		"height": 15000
+    },
+	"demand_generator":
+	{
+		"type": "uniform"
+	},
+	"service_time_function":
+	{
+		"type": "bilinear",
+		"lower_slope": 20,
+		"upper_slope": 60
+	},
+	"connector":
+	{
+		"type": "delaunay",
+		"min_angle_deg": 20
+	},
+	"edge_generator":
+	{
+		"type": "scaled",
+		"fractions": [0.3, 0.4, 0.9, 1.0, 1.0, 1.0, 0.9, 0.3],
+		"min_speed": 30,
+		"max_speed": 120
+	},
+	"vertex_count": 100,
+	"total_demand": 5000,
+	"demand_unit": 1,
+	"start_time": 21600,
+	"interval": 3600,
+	"interval_count": 8
+}
