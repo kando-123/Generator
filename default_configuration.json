@@ -28,9 +28,12 @@
 		"max_speed": 120
 	},
 	"vertex_count": 100,
-	"total_demand": 5000,
+	"total_demand": 4000,
 	"demand_unit": 1,
+	
 	"start_time": 21600,
 	"interval": 3600,
-	"interval_count": 8
+	"interval_count": 8,
+	"vehicle_count": 5,
+	"vehicle_capacity": 1000
 }

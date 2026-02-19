@@ -2,7 +2,6 @@ package pl.polsl.generator.graph;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import pl.polsl.generator.connection.*;
 import pl.polsl.generator.demand.*;
@@ -27,10 +26,6 @@ public class GraphGenerator
     private final int vertexCount;
     private final double totalDemand;
     private final double demandUnit;
-    
-    private final int startTime;
-    private final int interval;
-    private final int intervalCount;
 
     private GraphGenerator(GraphGeneratorBuilder builder)
     {
@@ -43,10 +38,6 @@ public class GraphGenerator
         vertexCount = builder.vertexCount;
         totalDemand = builder.totalDemand;
         demandUnit = builder.demandUnit;
-        
-        startTime = builder.startTime;
-        interval = builder.interval;
-        intervalCount = builder.intervalCount;
     }
     
     public Graph generateGraph()
@@ -96,10 +87,6 @@ public class GraphGenerator
         private Integer vertexCount;
         private Double totalDemand;
         private Double demandUnit;
-        
-        private Integer startTime;
-        private Integer interval;
-        private Integer intervalCount;
         
         public GraphGeneratorBuilder setPointGenerator(PointGenerator pointGenerator)
         {
@@ -174,36 +161,6 @@ public class GraphGenerator
                 throw new IllegalArgumentException("Parameter demandUnit shall be positive.");
             }
             this.demandUnit = demandUnit;
-            return this;
-        }
-        
-        public GraphGeneratorBuilder setStartTime(int startTime)
-        {
-            if (startTime <= 0)
-            {
-                throw new IllegalArgumentException("Parameter startTime shall be positive.");
-            }
-            this.startTime = startTime;
-            return this;
-        }
-        
-        public GraphGeneratorBuilder setInterval(int interval)
-        {
-            if (interval <= 0)
-            {
-                throw new IllegalArgumentException("Parameter interval shall be positive.");
-            }
-            this.interval = interval;
-            return this;
-        }
-        
-        public GraphGeneratorBuilder setIntervalCount(int intervalCount)
-        {
-            if (intervalCount <= 0)
-            {
-                throw new IllegalArgumentException("Parameter intervalCount shall be positive.");
-            }
-            this.intervalCount = intervalCount;
             return this;
         }
         

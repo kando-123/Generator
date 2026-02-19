@@ -27,9 +27,14 @@ public class Generator
 {
     public static void main(String[] args)
     {
-        if (args.length == 0)
+        if (args.length < 2)
         {
-            System.out.println("Provide a path to the JSON file containing the configuration.");
+            System.out.println("""
+                               Args:
+                                   [0] configuration JSON file (required),
+                                   [1] path to output file (req.),
+                                   [2] options: \"-over\" to overwrite, \"-next\" to add number (optional)
+                               """);
             return;
         }
         
@@ -40,12 +45,38 @@ public class Generator
             return;
         }
         
-        try (FileReader reader = new FileReader(input))
+        File output = new File(args[1]);
+        
+        try (FileReader reader = new FileReader(input); FileWriter writer = new FileWriter(output))
         {
-            JsonElement root = JsonParser.parseReader(reader);
+            JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
             GraphGenerator generator = createGraphGenerator(root);
             Graph graph = generator.generateGraph();
-            System.out.println(graph.toJson().toString());
+            
+            int startTime = root.get("start_time").getAsInt();
+            int interval = root.get("interval").getAsInt();
+            
+            int vehicleCount = root.get("vehicle_count").getAsInt();
+            double vehicleCapacity = root.get("vehicle_capacity").getAsDouble();
+            JsonObject vehicleObject = new JsonObject();
+            vehicleObject.addProperty("count", vehicleCount);
+            vehicleObject.addProperty("capacity", vehicleCapacity);
+            
+            JsonObject paramsObject = new JsonObject();
+            paramsObject.addProperty("start", startTime);
+            paramsObject.addProperty("interval", interval);
+            paramsObject.addProperty("depot", 0);
+            paramsObject.add("vehicle", vehicleObject);
+            
+            JsonObject problemObject = new JsonObject();
+            problemObject.add("graph", graph.toJson());
+            problemObject.add("params", paramsObject);
+            
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+            gson.toJson(problemObject, writer);
+            System.out.println("Saved: \"" + output.getAbsolutePath() + "\"");
         }
         catch (Exception exc)
         {
@@ -76,9 +107,6 @@ public class Generator
         int vertexCount = object.get("vertex_count").getAsInt();
         double totalDemand = object.get("total_demand").getAsDouble();
         double demandUnit = object.get("demand_unit").getAsDouble();
-        int startTime = object.get("start_time").getAsInt();
-        int interval = object.get("interval").getAsInt();
-        int intervalCount = object.get("interval_count").getAsInt();
         
         builder.setPointGenerator(pointGenerator)
                 .setDemandGenerator(demandGenerator)
@@ -87,10 +115,7 @@ public class Generator
                 .setEdgeGenerator(edgeGenerator)
                 .setVertexCount(vertexCount)
                 .setTotalDemand(totalDemand)
-                .setDemandUnit(demandUnit)
-                .setStartTime(startTime)
-                .setInterval(interval)
-                .setIntervalCount(intervalCount);
+                .setDemandUnit(demandUnit);
         return builder.build();
     }
     
