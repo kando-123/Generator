@@ -65,7 +65,9 @@ public class Point
     @Override
     public boolean equals(Object obj)
     {
-        return obj instanceof Point that ? this.x == that.x && this.y == that.y : false;
+        return obj instanceof Point that
+               && Math.round(1_000_000 * this.x) == Math.round(1_000_000 * that.x)
+               && Math.round(1_000_000 * this.y) == Math.round(1_000_000 * that.y);
     }
 
     @Override
@@ -80,6 +82,6 @@ public class Point
     @Override
     public String toString()
     {
-        return String.format(Locale.US, "(%.3f, %.3f)", x, y);
+        return String.format(Locale.US, "(%.6f, %.6f)", x, y);
     }
 }

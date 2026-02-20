@@ -1,12 +1,10 @@
 package pl.polsl.generator.graph;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import pl.polsl.generator.connection.*;
 import pl.polsl.generator.demand.*;
-import pl.polsl.generator.edge.Edge;
-import pl.polsl.generator.edge.EdgeGenerator;
+import pl.polsl.generator.edge.*;
 import pl.polsl.generator.point.*;
 import pl.polsl.generator.time.*;
 import pl.polsl.generator.vertex.*;

@@ -18,6 +18,13 @@ public class OrthogonalPointGenerator implements PointGenerator
         this.height = height;
         this.random = new Random();
     }
+    
+    public OrthogonalPointGenerator(int width, int height, long seed)
+    {
+        this.width = width;
+        this.height = height;
+        this.random = new Random(seed);
+    }
 
     @Override
     public Point[] generatePoints(int pointCount)

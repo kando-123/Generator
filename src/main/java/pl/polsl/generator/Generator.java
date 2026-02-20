@@ -45,7 +45,21 @@ public class Generator
             return;
         }
         
-        File output = new File(args[1]);
+        File base = new File(args[1]);
+        String parent = base.getParent();
+        String name = base.getName();
+        
+        int dotIndex = name.lastIndexOf('.');
+        String baseName, extension;
+        baseName = dotIndex > 0 ? name.substring(0, dotIndex) : name;
+        extension = dotIndex > 0 ? name.substring(dotIndex) : "";
+        
+        File output = base;
+        for (int i = 0; output.exists(); ++i)
+        {
+            String newName = String.format("%s_%d%s", baseName, i, extension);
+            output = parent != null ? new File(parent, newName) : new File(newName);
+        }
         
         try (FileReader reader = new FileReader(input); FileWriter writer = new FileWriter(output))
         {
@@ -128,7 +142,15 @@ public class Generator
             {
                 int width = parameters.get("width").getAsInt();
                 int height = parameters.get("height").getAsInt();
-                yield new OrthogonalPointGenerator(width, height);
+                if (parameters.has("seed"))
+                {
+                    long seed = parameters.get("seed").getAsLong();
+                    yield new OrthogonalPointGenerator(width, height, seed);
+                }
+                else
+                {
+                    yield new OrthogonalPointGenerator(width, height);
+                }
             }
             default ->
             {
@@ -149,7 +171,15 @@ public class Generator
         {
             case "uniform" ->
             {
-                yield new UniformDemandGenerator();
+                if (parameters.has("seed"))
+                {
+                    long seed = parameters.get("seed").getAsLong();
+                    yield new UniformDemandGenerator(seed);
+                }
+                else
+                {
+                    yield new UniformDemandGenerator();
+                }
             }
             default ->
             {
@@ -172,7 +202,15 @@ public class Generator
             {
                 double lowerSlope = parameters.get("lower_slope").getAsDouble();
                 double upperSlope = parameters.get("upper_slope").getAsDouble();
-                yield new BilinearServiceTimeFunction(lowerSlope, upperSlope);
+                if (parameters.has("seed"))
+                {
+                    long seed = parameters.get("seed").getAsLong();
+                    yield new BilinearServiceTimeFunction(lowerSlope, upperSlope, seed);
+                }
+                else
+                {
+                    yield new BilinearServiceTimeFunction(lowerSlope, upperSlope);
+                }
             }
             default ->
             {

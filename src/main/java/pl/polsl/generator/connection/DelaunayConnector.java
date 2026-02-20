@@ -35,19 +35,17 @@ public class DelaunayConnector implements Connector
         {
             Point corners[] = triangle.getPoints();
             int indexes[] = Arrays.stream(corners)
-                    .mapToInt(p -> indexation.get(p))
+                    .mapToInt(indexation::get)
                     .toArray();
             assert indexes.length == 3;
             for (int i = 0; i < 3; ++i)
             {
                 int first = indexes[i];
-                int last = indexes[(i + 1) % 3];
-                Connection connection = new Connection(first, last);
-                if (!connections.contains(connection))
+                int last = indexes[Triangle.next(i)];
+                if (connections.add(new Connection(first, last)))
                 {
                     ++incidenceCounter[first];
                     ++incidenceCounter[last];
-                    connections.add(connection);
                 }
             }
         }
@@ -60,11 +58,16 @@ public class DelaunayConnector implements Connector
                 int opposite = triangle.getMaximalAngleIndex();
                 int left = Triangle.next(opposite);
                 int right = Triangle.prev(opposite);
-                if (incidenceCounter[left] > 1 && incidenceCounter[right] > 1)
+                Point[] corners = triangle.getPoints();
+                int first = indexation.get(corners[left]);
+                int last = indexation.get(corners[right]);
+                if (incidenceCounter[first] > 1 && incidenceCounter[last] > 1)
                 {
-                    removables.add(new Connection(left, right));
-                    --incidenceCounter[left];
-                    --incidenceCounter[right];
+                    if (removables.add(new Connection(first, last)))
+                    {
+                        --incidenceCounter[first];
+                        --incidenceCounter[last];
+                    }
                 }
             }
         }

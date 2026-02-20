@@ -8,6 +8,18 @@ import java.util.Random;
  */
 public class UniformDemandGenerator implements DemandGenerator
 {
+    private final Random random;
+    
+    public UniformDemandGenerator()
+    {
+        random = new Random();
+    }
+    
+    public UniformDemandGenerator(long seed)
+    {
+        random = new Random(seed);
+    }
+    
     @Override
     public double[] generateDemand(int count, double total, double unit)
     {
@@ -26,7 +38,6 @@ public class UniformDemandGenerator implements DemandGenerator
             allocation[i] = unit;
         }
         double sum = count * unit;
-        Random random = new Random();
         while (sum < total)
         {
             int index = random.nextInt(count);

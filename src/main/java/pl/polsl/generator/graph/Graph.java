@@ -16,20 +16,14 @@ class Node
         this.edges = edges;
     }
     
-    private static final String KEY_X_COORDINATE = "x";
-    private static final String KEY_Y_COORDINATE = "y";
-    private static final String KEY_DEMAND = "q";
-    private static final String KEY_SERVICE_TIME = "t";
-    private static final String KEY_EDGES = "e";
-    
     JsonElement emit()
     {
         JsonObject nodeObject = new JsonObject();
         
-        nodeObject.addProperty(KEY_X_COORDINATE, vertex.getX());
-        nodeObject.addProperty(KEY_Y_COORDINATE, vertex.getY());
-        nodeObject.addProperty(KEY_DEMAND, vertex.getDemand());
-        nodeObject.addProperty(KEY_SERVICE_TIME, vertex.getServiceTime());
+        nodeObject.addProperty("x", vertex.getX());
+        nodeObject.addProperty("y", vertex.getY());
+        nodeObject.addProperty("q", vertex.getDemand());
+        nodeObject.addProperty("t", vertex.getServiceTime());
         
         JsonObject edgesObject = new JsonObject();
         edges.sort((Edge e1, Edge e2) -> Integer.compare(e1.getEnd().getIndex(), e2.getEnd().getIndex()));
@@ -45,7 +39,7 @@ class Node
             String end = String.valueOf(edge.getEnd().getIndex());
             edgesObject.add(end, times);
         }
-        nodeObject.add(KEY_EDGES, edgesObject);
+        nodeObject.add("e", edgesObject);
         
         return nodeObject;
     }
@@ -77,6 +71,7 @@ public class Graph
      * in the "edges" property begin in the current vertex. An edge is a key-value pair
      * of the "edges" object. The key is the index of the end vertex; the value is an array
      * of travel times.
+     * @return JSON element representing the graph
      */
     public JsonElement toJson()
     {

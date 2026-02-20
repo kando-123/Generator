@@ -36,9 +36,7 @@ public class Connection
     @Override
     public boolean equals(Object obj)
     {
-        return obj instanceof Connection that
-                ? this.first == that.first && this.last == that.last
-                : false;
+        return obj instanceof Connection that && this.first == that.first && this.last == that.last;
     }
 
     @Override
@@ -48,5 +46,11 @@ public class Connection
         hash = 97 * hash + this.first;
         hash = 97 * hash + this.last;
         return hash;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Connection[%d, %d]", first, last);
     }
 }
